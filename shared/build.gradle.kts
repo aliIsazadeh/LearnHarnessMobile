@@ -19,7 +19,7 @@ kotlin {
         }
     }
 
-    androidLibrary {
+    android {
         namespace = "com.esum.learnfarmore.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -27,6 +27,8 @@ kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
         }
+
+        withHostTestBuilder {}
     }
 
     sourceSets {
@@ -48,9 +50,13 @@ kotlin {
             implementation(libs.compose.ui)
 
             implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.io.core)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }
