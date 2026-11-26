@@ -137,6 +137,23 @@ class TeachingAgentTest {
     }
 
     @Test
+    fun renamesReusedCallIds() = runTest {
+        val client = ScriptedClient(
+            ModelReply("", listOf(question("call_0", "First?"))),
+            ModelReply("", listOf(question("call_0", "Second?"))),
+        )
+        val first = agent(client).run(start) {}
+        val pending = assertIs<SessionStatus.AwaitingAnswer>(first.session.status()).question
+        val answered = first.session.withAnswer(pending, LearnerAnswer("A", confidence = Confidence.CONFIDENT), json, now)
+
+        val second = agent(client).run(first.copy(session = answered)) {}
+
+        val next = assertIs<SessionStatus.AwaitingAnswer>(second.session.status()).question
+        assertEquals("call_0_2", next.callId)
+        assertEquals("Second?", next.prompt)
+    }
+
+    @Test
     fun marksStepStatus() = runTest {
         val plan = call("c1", TeacherTools.SET_PLAN) {
             putJsonArray("steps") { addJsonObject { put("id", "s1"); put("title", "Light is a mix of colors") } }

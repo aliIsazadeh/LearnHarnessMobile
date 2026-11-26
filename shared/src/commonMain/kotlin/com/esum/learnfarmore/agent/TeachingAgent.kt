@@ -35,7 +35,8 @@ class TeachingAgent(
         return state
     }
 
-    internal fun apply(state: TeachingState, reply: ModelReply): TeachingState {
+    internal fun apply(state: TeachingState, rawReply: ModelReply): TeachingState {
+        val reply = withUniqueCallIds(rawReply, state.session.messages)
         var plan = state.session.plan
         var graph = state.graph
         var questionPending = false
@@ -66,6 +67,20 @@ class TeachingAgent(
             updatedAt = clock(),
         )
         return TeachingState(session, graph)
+    }
+
+    /** Answers are matched to questions by call id, so ids must be unique across the whole session. */
+    private fun withUniqueCallIds(reply: ModelReply, history: List<LhMessage>): ModelReply {
+        val used = history.filterIsInstance<LhMessage.Assistant>().flatMap { it.toolCalls }.mapTo(HashSet()) { it.id }
+        val calls = reply.toolCalls.map { call ->
+            val base = call.id.ifBlank { "call" }
+            var id = base
+            var suffix = 2
+            while (id in used) id = "${base}_${suffix++}"
+            used += id
+            if (id == call.id) call else call.copy(id = id)
+        }
+        return reply.copy(toolCalls = calls)
     }
 
     private fun setPlan(call: ToolCall, current: List<PlanStep>): Outcome {
