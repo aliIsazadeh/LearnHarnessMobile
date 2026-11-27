@@ -37,7 +37,9 @@ Open `iosApp/iosApp.xcodeproj` in Xcode on a Mac, set your Team ID in `iosApp/Co
 | Provider | Default endpoint | Notes |
 | --- | --- | --- |
 | Anthropic | `https://api.anthropic.com` | Messages API with tools |
-| OpenAI-compatible | `https://api.openai.com/v1` | Chat Completions; set a custom base URL for OpenRouter, local servers, and similar |
+| OpenAI-compatible | `https://api.openai.com/v1` | Chat Completions; set a custom base URL for OpenRouter or a local server |
+
+Custom endpoints should use HTTPS. Plain HTTP is allowed only for local servers: `localhost`, `127.0.0.1`, and the Android emulator host `10.0.2.2` on Android, and local-network hosts on iOS.
 
 ## License
 
