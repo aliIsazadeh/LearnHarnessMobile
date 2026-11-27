@@ -10,7 +10,7 @@ This is an independent reimplementation of the teaching ideas behind [learnharne
 2. The tutor probes where your understanding ends, plans the shortest route, then teaches one step at a time with a check after each step.
 3. Ideas that land are stored as propositions linked to their premises, so later sessions can build on them.
 
-Your chats, graph, and API keys stay on the device. Requests go only to the model provider you configure.
+Your chats and graph are stored on the device and excluded from cloud backups. API keys are encrypted with the Android Keystore or iOS Keychain. Requests go only to the model provider you configure.
 
 ## Setup
 
@@ -38,8 +38,6 @@ Open `iosApp/iosApp.xcodeproj` in Xcode on a Mac, set your Team ID in `iosApp/Co
 | --- | --- | --- |
 | Anthropic | `https://api.anthropic.com` | Messages API with tools |
 | OpenAI-compatible | `https://api.openai.com/v1` | Chat Completions; set a custom base URL for OpenRouter, local servers, and similar |
-
-Keys are encrypted with the Android Keystore or iOS Keychain.
 
 ## License
 
