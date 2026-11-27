@@ -55,6 +55,7 @@ class OpenAiCompatibleClient(
                         put("content", system)
                     }
                     messages.forEach { message ->
+                        if (message is LhMessage.Assistant && message.isEmpty()) return@forEach
                         addJsonObject {
                             when (message) {
                                 is LhMessage.User -> {

@@ -110,6 +110,18 @@ class ProviderMappingTest {
     }
 
     @Test
+    fun emptyAssistantTurnsAreDroppedFromHistory() {
+        val history = listOf(LhMessage.User("hi"), LhMessage.Assistant(""), LhMessage.User("hello?"))
+
+        val anthropic = AnthropicClient.messagesJson(history)
+        assertEquals(listOf("user"), anthropic.map { it.jsonObject.str("role") })
+        assertEquals(2, anthropic.single().jsonObject.getValue("content").jsonArray.size)
+
+        val openAi = OpenAiCompatibleClient.buildRequest("m", "s", history, emptyList()).getValue("messages").jsonArray
+        assertEquals(listOf("system", "user", "user"), openAi.map { it.jsonObject.str("role") })
+    }
+
+    @Test
     fun anthropicSkipsEmptyAssistantText() {
         val messages = AnthropicClient.messagesJson(
             listOf(LhMessage.User("hi"), LhMessage.Assistant("", listOf(call)), LhMessage.ToolResult("call_1", "ok")),

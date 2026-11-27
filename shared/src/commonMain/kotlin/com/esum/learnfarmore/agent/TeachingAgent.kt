@@ -29,6 +29,9 @@ class TeachingAgent(
                 messages = state.session.messages,
                 tools = TeacherTools.specs,
             )
+            if (reply.text.isBlank() && reply.toolCalls.isEmpty()) {
+                throw ModelException("The model returned an empty reply.")
+            }
             state = apply(state, reply)
             onUpdate(state)
         }

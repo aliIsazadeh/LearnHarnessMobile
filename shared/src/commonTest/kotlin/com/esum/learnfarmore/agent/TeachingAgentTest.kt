@@ -16,6 +16,7 @@ import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
@@ -164,6 +165,16 @@ class TeachingAgentTest {
         val result = agent(client).run(start) {}
 
         assertEquals(StepStatus.ACTIVE, result.session.plan.single().status)
+    }
+
+    @Test
+    fun emptyReplyFailsWithoutSaving() = runTest {
+        val client = ScriptedClient(ModelReply("  ", emptyList()))
+        val updates = mutableListOf<TeachingState>()
+
+        assertFailsWith<ModelException> { agent(client).run(start) { updates += it } }
+
+        assertTrue(updates.isEmpty())
     }
 
     @Test

@@ -85,6 +85,7 @@ class AnthropicClient(
                         if (message.isError) put("is_error", true)
                     }
                     is LhMessage.Assistant -> {
+                        if (message.isEmpty()) return@forEach
                         val target = blocks("assistant")
                         if (message.text.isNotBlank()) target += buildJsonObject {
                             put("type", "text")

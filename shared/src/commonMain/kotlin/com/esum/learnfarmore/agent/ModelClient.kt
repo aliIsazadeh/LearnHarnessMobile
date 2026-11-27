@@ -17,6 +17,9 @@ interface ModelClient {
     suspend fun complete(system: String, messages: List<LhMessage>, tools: List<ToolSpec>): ModelReply
 }
 
+/** Providers reject assistant turns with no content; older sessions may still contain them. */
+internal fun LhMessage.Assistant.isEmpty(): Boolean = text.isBlank() && toolCalls.isEmpty()
+
 @Serializable
 private data class ErrorEnvelope(val error: ErrorBody? = null)
 
