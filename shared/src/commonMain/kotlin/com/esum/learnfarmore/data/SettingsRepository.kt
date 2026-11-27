@@ -48,6 +48,10 @@ class SettingsRepository(
         secrets.get(keyName(provider))
     }
 
+    suspend fun removeApiKey(provider: ProviderKind) = withContext(Dispatchers.IO) {
+        secrets.remove(keyName(provider))
+    }
+
     private fun keyName(provider: ProviderKind) = "api_key_${provider.name.lowercase()}"
 
     private companion object {
