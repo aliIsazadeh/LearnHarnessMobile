@@ -3,6 +3,7 @@ package com.esum.learnfarmore
 import com.esum.learnfarmore.agent.AnthropicClient
 import com.esum.learnfarmore.agent.ModelClient
 import com.esum.learnfarmore.agent.OpenAiCompatibleClient
+import com.esum.learnfarmore.agent.TeacherRunner
 import com.esum.learnfarmore.data.GraphRepository
 import com.esum.learnfarmore.data.JsonFileStore
 import com.esum.learnfarmore.data.ProviderKind
@@ -55,4 +56,6 @@ class AppContainer(dataDirectory: String, secretStore: SecretStore) {
         ProviderKind.ANTHROPIC -> AnthropicClient(http, json, apiKey, settings.model, settings.baseUrl)
         ProviderKind.OPENAI_COMPATIBLE -> OpenAiCompatibleClient(http, json, apiKey, settings.model, settings.baseUrl)
     }
+
+    val teacher = TeacherRunner(sessions, graph, settings, ::modelClient, clock)
 }
