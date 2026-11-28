@@ -42,7 +42,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.esum.learnfarmore.AppContainer
 import com.esum.learnfarmore.agent.newSession
-import com.esum.learnfarmore.data.ProviderKind
 import com.esum.learnfarmore.domain.Session
 import com.esum.learnfarmore.domain.StepStatus
 import kotlinx.coroutines.launch
@@ -61,7 +60,7 @@ fun HomeScreen(
     val hasKey by produceState<Boolean?>(null, settings) {
         value = !container.settings.apiKey(settings.provider).isNullOrBlank()
     }
-    val needsSetup = hasKey == false && (settings.provider == ProviderKind.ANTHROPIC || settings.baseUrl.isBlank())
+    val needsSetup = hasKey == false && settings.requiresApiKey()
     val scope = rememberCoroutineScope()
     var showNewSession by rememberSaveable { mutableStateOf(false) }
     var pendingDelete by remember { mutableStateOf<Session?>(null) }

@@ -1,7 +1,6 @@
 package com.esum.learnfarmore.agent
 
 import com.esum.learnfarmore.data.GraphRepository
-import com.esum.learnfarmore.data.ProviderKind
 import com.esum.learnfarmore.data.ProviderSettings
 import com.esum.learnfarmore.data.SessionRepository
 import com.esum.learnfarmore.data.SettingsRepository
@@ -62,7 +61,7 @@ class TeacherRunner(
         val session = sessions.get(sessionId) ?: return RunState()
         val provider = settings.settings.value
         val apiKey = settings.apiKey(provider.provider).orEmpty()
-        if (apiKey.isBlank() && (provider.provider == ProviderKind.ANTHROPIC || provider.baseUrl.isBlank())) {
+        if (apiKey.isBlank() && provider.requiresApiKey()) {
             return RunState(error = "Add your API key in Settings to start teaching.", missingKey = true)
         }
         TeachingAgent(clientFor(provider, apiKey), clock).run(TeachingState(session, graph.graph.value)) { update ->

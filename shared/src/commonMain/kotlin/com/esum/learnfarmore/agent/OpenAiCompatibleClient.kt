@@ -45,6 +45,7 @@ class OpenAiCompatibleClient(
 
     internal companion object {
         const val DEFAULT_BASE_URL = "https://api.openai.com/v1"
+        const val GROK_BASE_URL = "https://api.x.ai/v1"
 
         fun buildRequest(model: String, system: String, messages: List<LhMessage>, tools: List<ToolSpec>): JsonObject =
             buildJsonObject {

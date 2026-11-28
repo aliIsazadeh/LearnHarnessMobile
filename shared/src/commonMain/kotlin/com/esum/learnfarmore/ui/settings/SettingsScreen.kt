@@ -112,10 +112,12 @@ fun SettingsScreen(container: AppContainer, onBack: () -> Unit) {
 private fun providerLabel(provider: ProviderKind) = when (provider) {
     ProviderKind.ANTHROPIC -> "Anthropic"
     ProviderKind.OPENAI_COMPATIBLE -> "OpenAI-compatible"
+    ProviderKind.GROK -> "Grok"
 }
 
 private fun endpointHint(provider: ProviderKind) = when (provider) {
     ProviderKind.ANTHROPIC -> "Leave empty for api.anthropic.com."
     ProviderKind.OPENAI_COMPATIBLE ->
         "Leave empty for api.openai.com, or enter any compatible HTTPS base URL such as https://openrouter.ai/api/v1."
+    ProviderKind.GROK -> "Leave empty for api.x.ai."
 }

@@ -12,6 +12,7 @@ import kotlinx.serialization.Serializable
 enum class ProviderKind(val defaultModel: String) {
     ANTHROPIC("claude-sonnet-4-5"),
     OPENAI_COMPATIBLE("gpt-5"),
+    GROK("grok-4.7"),
 }
 
 @Serializable
@@ -20,7 +21,10 @@ data class ProviderSettings(
     val model: String = ProviderKind.ANTHROPIC.defaultModel,
     /** Empty means the provider's public endpoint. */
     val baseUrl: String = "",
-)
+) {
+    /** Only a custom OpenAI-compatible endpoint (for example a local server) may run without a key. */
+    fun requiresApiKey(): Boolean = provider != ProviderKind.OPENAI_COMPATIBLE || baseUrl.isBlank()
+}
 
 class SettingsRepository(
     private val store: JsonFileStore,

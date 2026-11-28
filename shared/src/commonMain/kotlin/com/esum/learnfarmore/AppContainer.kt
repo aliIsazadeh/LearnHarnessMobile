@@ -55,6 +55,9 @@ class AppContainer(dataDirectory: String, secretStore: SecretStore) {
     fun modelClient(settings: ProviderSettings, apiKey: String): ModelClient = when (settings.provider) {
         ProviderKind.ANTHROPIC -> AnthropicClient(http, json, apiKey, settings.model, settings.baseUrl)
         ProviderKind.OPENAI_COMPATIBLE -> OpenAiCompatibleClient(http, json, apiKey, settings.model, settings.baseUrl)
+        ProviderKind.GROK -> OpenAiCompatibleClient(
+            http, json, apiKey, settings.model, settings.baseUrl.ifBlank { OpenAiCompatibleClient.GROK_BASE_URL },
+        )
     }
 
     val teacher = TeacherRunner(sessions, graph, settings, ::modelClient, clock)
